@@ -1,9 +1,9 @@
 /******************************************************************************
 Copyright (C), 2015, dploop
-FileName: p1001.cpp
+FileName: p1000.cpp
 Author: dploop
 Date: 2015/10/27
-Description: http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=1001
+Description: http://ac.jobdu.com/problem.php?pid=1000
 ******************************************************************************/
 #include <stdio.h>
 
