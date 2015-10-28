@@ -1,2 +1,2 @@
 # oj
-solutions for oj problems
+oj problems
