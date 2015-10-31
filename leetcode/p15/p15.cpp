@@ -10,19 +10,30 @@ public:
 	vector<vector<int>> threeSum(vector<int>& nums) {
 		vector<vector<int>> ret;
 		int len = nums.size();
-		if (len <= 2) return ret;
 		sort(nums.begin(), nums.end());
-		int i, j, k, a, b, c;
-		for (i=0; i < len; ++i) {
-			if (i>0 && nums[i-1]==nums[i]) continue;
-			for (j=i+1; j < len; ++j) {
-				if (j>i+1 && nums[j-1]==nums[j]) continue;
-				a = nums[i]; b = nums[j]; c = -a-b;
-				if (binary_search(&nums[j+1], &nums[len], c)) {
-					vector<int> e(3, 0);
-					e[0]=a; e[1]=b; e[2]=c;
-					ret.push_back(e);
+		for (int i=0; i < len; ++i) {
+			if (i>0 && nums[i-1]==nums[i]) {
+				continue;
+			}
+			for (int j=i+1, k=len-1; j < k; ) {
+				if (j>i+1 && nums[j-1]==nums[j]) {
+					++j; continue;
 				}
+				if (k<len-1 && nums[k+1]==nums[k]) {
+					--k; continue;
+				}
+				int a=nums[i], b=nums[j], c=nums[k];
+				int sum = a + b + c;
+				if (sum > 0) {
+					--k; continue;
+				}
+				if (sum < 0) {
+					++j; continue;
+				}
+				vector<int> e(3, 0);
+				e[0]=a; e[1]=b; e[2]=c;
+				ret.push_back(e);
+				++j; --k;
 			}
 		}
 		return ret;
