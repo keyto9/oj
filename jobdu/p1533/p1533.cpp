@@ -24,10 +24,8 @@ void lis(int arr[], int n, int ans[], int &m) {
 				low  = mid + 1;
 			}
 		}
-		if (low>=m || tmp<ans[low]) {
-			ans[low] = tmp;
-			m = max(m, low+1);
-		}
+		ans[low] = tmp;
+		m = max(m, low+1);
 	}
 }
 
