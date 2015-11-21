@@ -6,73 +6,66 @@ Date: 2015/11/6
 Description: http://ac.jobdu.com/problem.php?pid=1500
 ******************************************************************************/
 #include <cstdio>
-#include <algorithm>
-using namespace std;
 
-const int MAXN = 1000010;
-
-void lis_inc(int arr[], int n, int ans[], int inc[]) {
-	int m = 0;
-	for (int i=0; i < n; ++i) {
-		int tmp=arr[i], mid;
-		int low=0, high=m-1;
-		for (; low <= high; ) {
-			mid = (low+high)/2;
-			if (ans[mid] >= tmp) {
-				high = mid - 1;
-			} else {
-				low  = mid + 1;
-			}
+void longest_increasing_subsequence_left(
+		  int array[], int array_size
+		, int tail[],  int len_left[]
+		// , int prev[]
+								) {
+	int tail_size = 0;
+	// memset(prev, 0xff, array_size*sizeof(int));
+	for (int index=0; index < array_size; ++index) {
+		int low=0, high=tail_size-1; for (; low <= high; ) {
+			int mid = low + (high - low) / 2;
+			// '<' '<=' '>' '>='  ---- four cases
+			( array[ tail[mid] ] < array[index] )
+			? (low = mid + 1) : (high = mid - 1);
 		}
-		inc[i] = low;
-		ans[low] = tmp;
-		m = max(m, low+1);
+		tail[low] = index; len_left[index] = low;
+		(tail_size<=low) && (tail_size = low + 1);
+		// (low > 0) && (prev[index] = tail[low-1]);
 	}
 }
 
-void lis_dec(int arr[], int n, int ans[], int dec[]) {
-	int m = 0;
-	for (int i=n-1; i>=0; --i) {
-		int tmp=arr[i], mid;
-		int low=0, high=m-1;
-		for (; low <= high; ) {
-			mid = (low+high)/2;
-			if (ans[mid] >= tmp) {
-				high = mid - 1;
-			} else {
-				low  = mid + 1;
-			}
+void longest_increasing_subsequence_right(
+		  int array[], int array_size
+		, int tail[],  int len_right[]
+		// , int prev[]
+								) {
+	int tail_size = 0;
+	// memset(prev, 0xff, array_size*sizeof(int));
+	for (int index=array_size-1; index >= 0; --index) {
+		int low=0, high=tail_size-1; for (; low <= high; ) {
+			int mid = low + (high - low) / 2;
+			// '<' '<=' '>' '>='  ---- four cases
+			( array[ tail[mid] ] < array[index] )
+			? (low = mid + 1) : (high = mid - 1);
 		}
-		dec[i] = low;
-		ans[low] = tmp;
-		m = max(m, low+1);
+		tail[low] = index; len_right[index] = low;
+		(tail_size<=low) && (tail_size = low + 1);
+		// (low > 0) && (prev[index] = tail[low-1]);
 	}
 }
 
 int main()
 {
-	static int arr[MAXN], n;
-	static int ans[MAXN], inc[MAXN], dec[MAXN];
-	for (; EOF!=scanf("%d", &n); ) {
-		for (int i=0; i < n; ++i) {
-			scanf("%d", &arr[i]);
+	const int MAXN = 1000010;
+	static int array[MAXN], array_size;
+	static int tail[MAXN], len_left[MAXN], len_right[MAXN];
+	for (; EOF!=scanf("%d", &array_size); ) {
+		for (int i=0; i < array_size; ++i) {
+			scanf("%d", &array[i]);
 		}
-		lis_inc(arr, n, ans, inc);
-		// for (int i=0; i < n; ++i) {
-		// 	printf("%d ", inc[i]);
-		// }
-		// puts("");
-		lis_dec(arr, n, ans, dec);
-		// for (int i=0; i < n; ++i) {
-		// 	printf("%d ", dec[i]);
-		// }
-		// puts("");
+		longest_increasing_subsequence_left(
+			array, array_size, tail, len_left);
+		longest_increasing_subsequence_right(
+			array, array_size, tail, len_right);
 		int max_len = 0;
-		for (int i=0; i < n; ++i) {
-			int tmp = inc[i]+dec[i]+1;
-			max_len = max(max_len, tmp);
+		for (int i=0; i < array_size; ++i) {
+			int tmp = len_left[i]+len_right[i]+1;
+			(max_len < tmp) && (max_len = tmp);
 		}
-		printf("%d\n", n-max_len);
+		printf("%d\n", array_size-max_len);
 	}
 	return 0;
 }
