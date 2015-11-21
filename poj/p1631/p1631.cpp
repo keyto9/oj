@@ -1,9 +1,9 @@
 /******************************************************************************
 Copyright (C), 2015, dploop
-FileName: p1950.cpp
+FileName: p1631.cpp
 Author: dploop
-Date: 2015/11/7
-Description: http://acm.hdu.edu.cn/showproblem.php?pid=1950
+Date: 2015/11/22
+Description: http://poj.org/problem?id=1631
 ******************************************************************************/
 #include <cstdio>
 
