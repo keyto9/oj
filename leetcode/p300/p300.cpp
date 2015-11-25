@@ -7,25 +7,18 @@ Description: https://leetcode.com/problems/longest-increasing-subsequence/
 ******************************************************************************/
 class Solution {
 public:
-    int lengthOfLIS(vector<int>& nums) {
-        int len=nums.size(), ret=0;
-        vector<int> stk(len+1, 0);
-        for (auto x : nums) {
-            int low=1, high=ret;
-            while (low <= high) {
-                int mid=(low+high)/2;
-                if (stk[mid] >= x) {
-                    high = mid - 1;
-                } else {
-                    low = mid + 1;
-                }
-            }
-            stk[low] = x;
-            if (ret < low) {
-                ret = low;
-            }
-        }
-        return ret;
-    }
+	int lengthOfLIS(vector<int>& nums) {
+		int len=nums.size(), ret=0;
+		vector<int> stk(len+1, 0);
+		for (auto x : nums) {
+			int low=1, high=ret; for (; low <= high; ) {
+				int mid = low + (high - low) / 2;
+				(stk[mid] < x) ? (low=mid+1) : (high=mid-1);
+			}
+			stk[low] = x;
+			(ret < low) && (ret = low);
+		}
+		return ret;
+	}
 };
 
