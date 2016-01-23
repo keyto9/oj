@@ -13,26 +13,20 @@ using namespace std;
 template<typename T> class PrimeTable {
 private:
 	vector<uint32_t> array; vector<T> plist;
-	int setf(T n) {array[n/32] &= ~(1<<(n%32)); return 0;}
-	int sett(T n) {array[n/32] |=  (1<<(n%32)); return 0;}
-	int flip(T n) {array[n/32] ^=  (1<<(n%32)); return 0;}
+	void setf(T n) {array[n/32] &= ~(1<<(n%32));}
 public:
 	bool isPrime(T n) {return (array[n/32]&(1<<(n%32)));}
 	T getPrime(T idx) {return plist[idx];}
 	T getLimit() {return (array.size() * 32);}
 	T getCount() {return (plist.size() - 1);}
-	PrimeTable(T limit) {T x, y, xx, yy, n; // sieve of atkin
-		limit = (limit + 31) / 32 * 32;
-		array.resize(limit/32, 0); sett(2); sett(3);
-		for(x=1;(xx=x*x)<limit;++x) for(y=1;(yy=y*y)<limit;++y) {
-			((n=4*xx+yy)<limit) && (n%12==1||n%12==5) && flip(n);
-			((n=3*xx+yy)<limit) && (n%12==7) && flip(n);
-			((x>y)&&((n=3*xx-yy)<limit) && (n%12==11) && flip(n));
+	PrimeTable(T limit) {
+		limit = (limit+31) / 32 * 32;
+		array.resize(limit / 32, -1);
+		setf(0); setf(1); T d, n;
+		for (d=2; d*d<limit; ++d) if(isPrime(d)) {
+			for (n=d+d; n<limit; n+=d) {setf(n);}
 		}
-		for (x=5; (xx=x*x) < limit; ++x) if (isPrime(x)) {
-			for (n=xx; n < limit; n += xx) {setf(n);}
-		}
-		plist.push_back(0); for (n=1; n < limit; ++n) {
+		plist.push_back(0); for (n=1; n<limit; ++n) {
 			if (isPrime(n)) {plist.push_back(n);}
 		}
 	}
