@@ -1,8 +1,8 @@
 /******************************************************************************
 Copyright (C), 2016, dploop
-FileName: p343.cpp
+FileName: p344.cpp
 Author: dploop
-Date: 2016/4/19
+Date: 2016/4/22
 Description: https://leetcode.com/problems/reverse-string/
 ******************************************************************************/
 class Solution {
