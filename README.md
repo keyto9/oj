@@ -1,2 +1,1 @@
-# oj
-oj problems
+# oj solution
