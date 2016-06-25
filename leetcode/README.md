@@ -78,6 +78,7 @@
 | 143 | [Reorder List]( https://leetcode.com/problems/reorder-list/ ) | [C++]( 143.%20Reorder%20List ) |
 | 144 | [Binary Tree Preorder Traversal]( https://leetcode.com/problems/binary-tree-preorder-traversal/ ) | [C++]( 144.%20Binary%20Tree%20Preorder%20Traversal ) |
 | 145 | [Binary Tree Postorder Traversal]( https://leetcode.com/problems/binary-tree-postorder-traversal/ ) | [C++]( 145.%20Binary%20Tree%20Postorder%20Traversal ) |
+| 146 | [LRU Cache]( https://leetcode.com/problems/lru-cache/ ) | [C++]( 146.%20LRU%20Cache ) |
 | 147 | [Insertion Sort List]( https://leetcode.com/problems/insertion-sort-list/ ) | [C++]( 147.%20Insertion%20Sort%20List ) |
 | 149 | [Max Points on a Line]( https://leetcode.com/problems/max-points-on-a-line/ ) | [C++]( 149.%20Max%20Points%20on%20a%20Line ) |
 | 150 | [Evaluate Reverse Polish Notation]( https://leetcode.com/problems/evaluate-reverse-polish-notation/ ) | [C++]( 150.%20Evaluate%20Reverse%20Polish%20Notation ) |
