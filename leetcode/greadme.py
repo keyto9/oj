@@ -24,7 +24,13 @@ def sols(dname):
         ret.append('Java')
     if '.py' in exts:
         ret.append('Python')
-    return ','.join(ret)
+    if '.c' in exts:
+        ret.append('C')
+    if '.erl' in exts:
+        ret.append('Erlang')
+    if '.hs' in exts:
+        ret.append('Haskell')
+    return '/'.join(ret)
 
 def func(dname):
     t = dname.split('. ')
