@@ -18,18 +18,20 @@ def sols(dname):
     flst = [x for x in os.listdir(dname)]
     exts = [os.path.splitext(x)[1] \
                             for x in flst]
-    if '.cpp' in exts:
-        ret.append('C++')
-    if '.java' in exts:
-        ret.append('Java')
-    if '.py' in exts:
-        ret.append('Python')
     if '.c' in exts:
         ret.append('C')
+    if '.cpp' in exts:
+        ret.append('C++')
     if '.erl' in exts:
         ret.append('Erlang')
     if '.hs' in exts:
         ret.append('Haskell')
+    if '.java' in exts:
+        ret.append('Java')
+    if '.js' in exts:
+        ret.append('JS')
+    if '.py' in exts:
+        ret.append('Python')
     return '/'.join(ret)
 
 def func(dname):

@@ -161,3 +161,4 @@
 | 350 | [Intersection of Two Arrays II]( https://leetcode.com/problems/intersection-of-two-arrays-ii/ ) | [C++]( 350.%20Intersection%20of%20Two%20Arrays%20II ) |
 | 352 | [Data Stream as Disjoint Intervals]( https://leetcode.com/problems/data-stream-as-disjoint-intervals/ ) | [C++]( 352.%20Data%20Stream%20as%20Disjoint%20Intervals ) |
 | 354 | [Russian Doll Envelopes]( https://leetcode.com/problems/russian-doll-envelopes/ ) | [C++]( 354.%20Russian%20Doll%20Envelopes ) |
+| 365 | [Water and Jug Problem]( https://leetcode.com/problems/water-and-jug-problem/ ) | [C/C++/Java/JS/Python]( 365.%20Water%20and%20Jug%20Problem ) |
