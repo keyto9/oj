@@ -1,16 +1,14 @@
 class Solution {
 public:
     int mySqrt(int x) {
-        return (int) (1 / Q_rsqrt(x));
+        if (x < 0) return -1;
+        return floorSqrt(x);
     }
-    double Q_rsqrt(double x)
-    {
-        int64_t i = * (int64_t*) &x;
-        i = 0x5fe6eb50c7aa19f9 - i/2;
-        double y = * (double*) &i;
-        y = y * (3 - x*y*y) * 0.5;
-        y = y * (3 - x*y*y) * 0.5;
-        y = y * (3 - x*y*y) * 0.5;
-        return y;
+    int32_t floorSqrt(int32_t x) {
+        double y=x; int64_t i=0x5fe6eb50c7b537a9;
+        y = *(double*)&(i = i-(*(int64_t*)&y)/2);
+        y = y * (3 - x * y * y) * 0.5;
+        y = y * (3 - x * y * y) * 0.5;
+        i = x * y + 1; return i - (i * i > x);
     }
 };

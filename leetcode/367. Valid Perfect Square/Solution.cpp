@@ -7,7 +7,7 @@ public:
     }
 
     int32_t floorSqrt(int32_t x) {
-        double y=x; int64_t i=0x5fe6eb50c7aa19f9;
+        double y=x; int64_t i=0x5fe6eb50c7b537a9;
         y = *(double*)&(i = i-(*(int64_t*)&y)/2);
         y = y * (3 - x * y * y) * 0.5;
         y = y * (3 - x * y * y) * 0.5;
