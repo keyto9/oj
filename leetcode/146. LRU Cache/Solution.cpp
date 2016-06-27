@@ -90,6 +90,10 @@ public:
         }
         return p;
     }
+    
+    bool noCapacity() {
+        return pool == NULL;
+    }
 
 private:
     LRUNode        *pool;
@@ -99,15 +103,17 @@ private:
 
 class LRUCache {
 public:
-    LRUCache(int capacity) : pool(capacity) {
+    LRUCache(int capacity)
+        : pool(capacity) {
     }
 
     int get(int key) {
+        LRUNode *p;
         auto it = mp.find(key);
         if (it == mp.end()) {
             return -1;
         } else {
-            LRUNode *p = it->second;
+            p = it->second;
             list.remove(p);
             list.insert(p);
             return list.getValue(p);
@@ -115,13 +121,14 @@ public:
     }
 
     void set(int key, int value) {
+        if (pool.noCapacity()) {
+            return;
+        }
         LRUNode *p;
         auto it = mp.find(key);
         if (it == mp.end()) {
             if (!(p=pool.malloc())) {
-                if (!(p=list.last())) {
-                    return;
-                }
+                p = list.last();
                 mp.erase(list.getKey(p));
                 list.remove(p);
             }
