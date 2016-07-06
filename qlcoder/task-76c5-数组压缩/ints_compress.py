@@ -1,87 +1,96 @@
-import struct
+# -*- coding: utf-8 -*-
 
-def packto_byte(eightbit):
-    onebyte = 0
-    for x in eightbit:
-        onebyte = onebyte * 2 + x
-    return onebyte
+class bitset:
 
-def unpack_byte(onebyte):
-    eightbit = [None] * 8
-    for i in [7,6,5,4,3,2,1,0]:
-        eightbit[i] = onebyte % 2
-        onebyte = onebyte // 2
-    return eightbit
+    def __init__(self, size=0):
+        self._size = size
+        self._v = bytearray((size + 7) // 8)
 
-def packto_bytes(nbits):
-    n = len(nbits); rem = n % 8
-    if rem > 0:
-        nbits.extend([0]*(8-rem))
-    bytes = []
-    for i in range(0, n, 8):
-        bytes.append(packto_byte(nbits[i:i+8]))
-    return bytes
+    def __len__(self):
+        return self._size
 
-def unpack_bytes(bytes):
-    nbits = []
-    for x in bytes:
-        nbits.extend(unpack_byte(x))
-    return nbits
+    def __getitem__(self, pos):
+        return 1 & (self._v[pos//8] >> pos%8)
 
-def is_short_int(x):
-    return ((-32768 <= x) and (x <= 32767))
+    def __setitem__(self, pos, val):
+        if val == 0:
+            self._v[pos//8] &= ~(1 << pos%8)
+        else:
+            self._v[pos//8] |=  (1 << pos%8)
+
+    def append(self, val):
+        if self._size == len(self._v)*8:
+            self._v.append(0)
+        self._size = self._size + 1
+        self[self._size - 1] = val
+
+    def extend(self, vals):
+        for val in vals:
+            self.append(val)
+
+    def slice(self, begin, end):
+        return [self[x] for x in range(begin, end)]
+
+    def to_bytearray(self):
+        return self._v
+
+    def from_bytearray(self, ba):
+        self._size = len(ba)*8
+        self._v = ba
+
+
+def i2b(i, n):
+    b = [0] * n
+    for x in range(n):
+        b[x], i = i % 2, i // 2
+    return b
+
+def b2i(b):
+    i, p = 0, 1
+    for x in b:
+        i, p = i + x * p, p * 2
+    return i
+
+def enc(x):
+    return (x*2 if (x>=0) else (-1-x*2))
+
+def dec(y):
+    return ((-1-y)//2 if y%2 else y//2)
+
+
+cutpoints = [14,14,14,14,32]
+
 
 def write_to_buffer(nums):
-    buf, nbits = bytearray(), []
-    for i in nums:
-        if is_short_int(i):
-            nbits.append(0)
-            nbits.extend(unpack_bytes(list(struct.pack('h', i))))
-            # nbits.extend(unpack_bytes([ord(x) for x
-            #         in list(struct.pack('h', i))]))
-        else:
-            nbits.append(1)
-            nbits.extend(unpack_bytes(list(struct.pack('i', i))))
-            # nbits.extend(unpack_bytes([ord(x) for x
-            #         in list(struct.pack('i', i))]))
-        while len(nbits) >= 8:
-            buf.extend(bytearray(packto_bytes(nbits[:8])))
-            nbits = nbits[8:]
-    buf.extend(bytearray(packto_bytes(nbits)))
-    return buf
+    bs = bitset()
+    for x in nums:
+        i, prefix = enc(x), []
+        begin, cut, end = 0, 0, 0
+        for t in cutpoints:
+            begin, cut, end = end, t, end+2**t
+            if i < end: break
+            prefix.append(1)
+        if cut < 32:
+            prefix.append(0)
+        i = i - begin
+        bs.extend(prefix+i2b(i, cut))
+
+    return bs.to_bytearray()
+
 
 def read_from_buffer(buf):
-    nbits = unpack_bytes(list(buf))
-    nums, i, n = [], 0, len(nbits)
-    while i < n:
-        if nbits[i] == 0:
-            i = i + 1
-            if i + 16 > n: break
-            nums.append(struct.unpack('h', bytearray(
-                    packto_bytes(nbits[i:i+16])))[0])
-            i = i + 16
-        else:
-            i = i + 1
-            if i + 32 > n: break
-            nums.append(struct.unpack('i', bytearray(
-                    packto_bytes(nbits[i:i+32])))[0])
-            i = i + 32
+    bs = bitset()
+    bs.from_bytearray(buf)
+    nums, k, n = [], 0, len(bs)
+    while k < n:
+        begin, cut, end = 0, 0, 0
+        for t in cutpoints:
+            begin, cut, end = end, t, end+2**t
+            if (bs[k]==0) or (cut>=32): break
+            k = k + 1
+        if cut < 32: k = k + 1
+        if k + cut > n: break
+        i = begin + b2i(bs.slice(k, k+cut))
+        nums.append(dec(i))
+        k = k + cut
     return nums
-
-
-print(read_from_buffer(write_to_buffer([])))
-print(read_from_buffer(write_to_buffer([0])))
-print(read_from_buffer(write_to_buffer([1])))
-print(read_from_buffer(write_to_buffer([-1])))
-print(read_from_buffer(write_to_buffer([0,1,-1,2,-2,2333333])))
-print(read_from_buffer(write_to_buffer(range(33))))
-
-with open('task_142_test1.txt', 'r') as fin:
-    nums = []
-    for s in fin.readlines():
-        nums.append(int(s))
-    buf = write_to_buffer(nums)
-    print(len(buf) / 400000.0)
-    # nums2 = read_from_buffer(buf)
-    # for i in nums2:
-    #     print(i)
